@@ -38,7 +38,7 @@ locations="\
     warsaw
     stockholm
 "
-src="$2"
+src="${@:2}"
 
 MIN_RESOLVED_IP_LINES_COUNT=20
 SLEEP_TIME=0.1

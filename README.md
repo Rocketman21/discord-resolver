@@ -17,7 +17,7 @@ chmod +x install.sh
 минуя основной список
 
 ```bash
-/usr/bin/discord-resolver.sh start "russia us-east us-west"
+/usr/bin/discord-resolver.sh start russia us-east us-west
 ```
 
 2. Запускается по расписанию (cron)
