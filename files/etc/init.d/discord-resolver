@@ -1,0 +1,21 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+PID_FILE=/var/run/discord-resolver.pid
+
+start() {
+    logger "Starting discord-resolver"
+    /usr/bin/discord-resolver.sh start "$@" &
+    echo $! > PID_FILE
+}
+
+stop() {
+    if [ -f "$PID_FILE" ]; then
+        PID=$(cat "$PID_FILE")
+        logger "Stopping discord-resolver with PID $PID"
+        kill "$PID"
+        rm -f "$PID_FILE"
+    else
+        logger "PID file not found"
+    fi
+}
