@@ -1,21 +1,29 @@
 #!/bin/sh /etc/rc.common
 
 START=99
-PID_FILE=/var/run/discord-resolver.pid
+USE_PROCD=1
+PROG=/usr/bin/discord-resolver.sh
 
-start() {
+start_service() {
     logger "Starting discord-resolver"
-    /usr/bin/discord-resolver.sh start "$@" &
-    echo $! > PID_FILE
+
+    procd_open_instance
+    procd_set_param command "$PROG" start $@
+    procd_set_param respawn
+    procd_close_instance
 }
 
-stop() {
-    if [ -f "$PID_FILE" ]; then
-        PID=$(cat "$PID_FILE")
-        logger "Stopping discord-resolver with PID $PID"
-        kill "$PID"
-        rm -f "$PID_FILE"
+stop_service() {
+    killall -q discord-resolver.sh
+    logger "Stopped discord-resolver"
+}
+
+status() {
+    if pidof discord-resolver.sh >/dev/null; then
+        echo "Running"
+        return 0
     else
-        logger "PID file not found"
+        echo "Stopped"
+        return 1
     fi
 }

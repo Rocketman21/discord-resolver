@@ -38,7 +38,7 @@ locations="\
     warsaw
     stockholm
 "
-src="$1"
+src="$2"
 
 MIN_RESOLVED_IP_LINES_COUNT=20
 SLEEP_TIME=0.1
@@ -73,7 +73,7 @@ resolve() {
 
         if [ $(( i % $MAX_CONCURRENT_DNS_QUERIES )) -eq 0 ]; then 
             logger "Resolving Discord IPs... Current location: $loc index: $i out of $ADDR_PER_LOCATION"
-        wait
+            wait
             timeout $SLEEP_TIME sleep 0
         fi
 
