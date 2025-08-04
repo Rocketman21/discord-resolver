@@ -2,7 +2,7 @@
 
 START=99
 USE_PROCD=1
-PROG=/usr/bin/discord-resolver.sh
+PROG=/opt/discord-resolver/discord-resolver.sh
 
 start_service() {
     logger "Starting discord-resolver"
@@ -20,10 +20,8 @@ stop_service() {
 
 status() {
     if pidof discord-resolver.sh >/dev/null; then
-        echo "Running"
         return 0
     else
-        echo "Stopped"
         return 1
     fi
 }

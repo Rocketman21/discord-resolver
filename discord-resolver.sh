@@ -38,7 +38,7 @@ locations="\
     warsaw
     stockholm
 "
-src="${@:2}"
+src="$locations"
 
 MIN_RESOLVED_IP_LINES_COUNT=20
 SLEEP_TIME=0.1
@@ -61,7 +61,7 @@ resolve() {
     start=$(date +%s)
     logger "[START] Resolving discord IPs..."
 
-    echo "$src" | while read -r loc; do
+    for loc in $src; do
         [ -z "$loc" ] && continue
 
         i=0
@@ -88,7 +88,7 @@ resolve() {
 }
 
 start() {
-    [ -z "$1" ] && src="$locations"
+    [ $# -gt 0 ] && src=$@
 
     resolve
 
@@ -98,7 +98,6 @@ start() {
             resolve
         fi
 
-        wait
         sleep 5;
     done
 }

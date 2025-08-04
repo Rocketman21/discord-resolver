@@ -1,24 +1,27 @@
 #!/bin/sh
 
-service="/etc/init.d/discord-resolver"
-tmp_file="/tmp/discord-resolver-crontab-tmp"
+script_name=discord-resolver.sh
+service_name=discord-resolver-service
+script=/opt/discord-resolver/$script_name
+service=/etc/init.d/$service_name
 
 echo "[+] Installing dependencies..."
 opkg update
 opkg install coreutils-timeout conntrack
 
 echo "[+] Installing script files..."
-cp files/usr/bin/discord-resolver.sh /usr/bin/discord-resolver.sh
-cp files/etc/init.d/discord-resolver "$service"
-chmod +x "$service"
+mkdir -p "$(dirname "$script")"
+cp "$script_name" "$script"
+cp "$service_name" "$service"
+chmod +x "$script" "$service"
 
 echo "[+] Setting up cron job..."
-new_cron_job="0 5 * * * $service"
+new_cron_job="0 5 * * * $script start"
 (crontab -l 2>/dev/null | grep -vF "$new_cron_job"; echo "$new_cron_job") | crontab -
 
 echo "[+] Enabling service..."
-/etc/init.d/discord-resolver enable
+"$service" enable
 
 echo "[+] Done. Start the service with:"
-echo "    /etc/init.d/discord-resolver start"
+echo "    $service start"
 
